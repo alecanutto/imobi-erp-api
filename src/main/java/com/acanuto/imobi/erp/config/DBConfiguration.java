@@ -3,6 +3,7 @@ package com.acanuto.imobi.erp.config;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.*;
+
 import javax.sql.DataSource;
 
 import lombok.Getter;
@@ -25,5 +26,5 @@ public class DBConfiguration {
 		return DataSourceBuilder.create().url("jdbc:postgresql://localhost:5432/Imobiliaria_DB").username("postgres")
 				.password("123").build();
 	}
-
+	
 }

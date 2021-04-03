@@ -8,7 +8,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Data
 @AllArgsConstructor
@@ -21,7 +23,11 @@ public class UserDetailsImpl implements UserDetails {
 	private String username;
 	private String senha;
 	private boolean ativo;
+	@Getter
+	@Setter
+	private String token;
 	private Collection<? extends GrantedAuthority> permissoes = new ArrayList<>();
+		
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -39,6 +45,11 @@ public class UserDetailsImpl implements UserDetails {
 	}	
 
 	@Override
+	public boolean isEnabled() {
+		return ativo;
+	}
+
+	@Override
 	public boolean isAccountNonExpired() {
 		return true;
 	}
@@ -51,10 +62,5 @@ public class UserDetailsImpl implements UserDetails {
 	@Override
 	public boolean isCredentialsNonExpired() {
 		return true;
-	}
-
-	@Override
-	public boolean isEnabled() {
-		return ativo;
 	}
 }

@@ -9,12 +9,9 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.acanuto.imobi.erp.security.jwt.JwtAuthEntryPoint;
 import com.acanuto.imobi.erp.security.jwt.JwtAuthFilter;
 import com.acanuto.imobi.erp.security.service.UserDetailsServiceImpl;
 
@@ -23,22 +20,14 @@ import com.acanuto.imobi.erp.security.service.UserDetailsServiceImpl;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
-	private static final String[] SWAGGER_WHITELIST =
-		{
-	            "/v2/api-docs",
-	            "/swagger-resources",
-	            "/swagger-resources/**",
-	            "/configuration/ui",
-	            "/configuration/security",
-	            "/swagger-ui.html",
-	            "/webjars/**"
-		};
+//	private static final String[] SWAGGER_WHITELIST = { "/v2/api-docs", "/swagger-resources", "/swagger-resources/**",
+//			"/configuration/ui", "/configuration/security", "/swagger-ui.html", "/webjars/**" };
 
 	@Autowired
 	UserDetailsServiceImpl userDetailsService;
 
-	@Autowired
-	private JwtAuthEntryPoint unauthorizedHandler;
+//	@Autowired
+//	private JwtAuthEntryPoint unauthorizedHandler;
 
 	@Bean
 	public JwtAuthFilter authenticationJwtTokenFilter() {
@@ -54,15 +43,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.cors().and().csrf().disable();
 		
 		http.authorizeRequests()
-		.antMatchers(SWAGGER_WHITELIST).permitAll()
-		.antMatchers("/api/auth/**").permitAll()
-		.antMatchers("/api/**").hasRole("ADMIN")
-		.anyRequest().authenticated();	
+		.antMatchers("/api/**").permitAll();
+//		.antMatchers(SWAGGER_WHITELIST).permitAll()
+//		.antMatchers("/api/auth/**").permitAll()
+//		.antMatchers("/api/**").hasRole("ADMIN")
+//		.anyRequest().authenticated();	
 				
-		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+//		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 		
-		http.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//		http.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+//		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		
 	}
 

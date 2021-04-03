@@ -17,19 +17,19 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.acanuto.imobi.erp.model.UserPermissions;
-import com.acanuto.imobi.erp.repository.UserPermissionsRepository;
-import com.acanuto.imobi.erp.repository.UserRepository;
+import com.acanuto.imobi.erp.model.PermissaoAcesso;
+import com.acanuto.imobi.erp.repository.PermissaoAcessoRepository;
+import com.acanuto.imobi.erp.repository.UsuarioRepository;
 import com.acanuto.imobi.erp.util.Function;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
-	UserRepository userRepository;
+	UsuarioRepository userRepository;
 
 	@Autowired
-	UserPermissionsRepository repository;
+	PermissaoAcessoRepository repository;
 
 	@Override
 	@Transactional
@@ -41,29 +41,31 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			builder.roles("ADMIN");
 
 			UserDetails ud = builder.build();
-			return new UserDetailsImpl(9999, ud.getUsername(), ud.getPassword(), ud.isEnabled(), ud.getAuthorities());
+			return new UserDetailsImpl(9999, ud.getUsername(), ud.getPassword(), ud.isEnabled(), "",
+					ud.getAuthorities());
 		}
-		
-		Optional<com.acanuto.imobi.erp.model.User> user = userRepository.getByUsername(username);
+
+		Optional<com.acanuto.imobi.erp.model.Usuario> user = userRepository.getByLogin(username);
 		if (user.isEmpty()) {
 			throw new UsernameNotFoundException("Usuário não encontrado: " + username);
 		}
-		
-		List<UserPermissions> permissions = repository.getAllByUserId(user.get().getId());
-		
+
+		List<PermissaoAcesso> permissions = repository.getAllByUserId(user.get().getId());
+
 		UserDetailsImpl userDetails = new UserDetailsImpl();
 		userDetails.setId(user.get().getId());
 		userDetails.setUsername(username);
 		userDetails.setSenha(user.get().getSenha());
 		userDetails.setAtivo(user.get().isAtivo());
-		
+		userDetails.setToken("");
+
 		List<GrantedAuthority> listAuthorities = new ArrayList<GrantedAuthority>();
-		for (UserPermissions userPermissions : permissions) {
-			listAuthorities.add(new SimpleGrantedAuthority(userPermissions.getNomePermissao()));
+		for (PermissaoAcesso userPermissions : permissions) {
+			listAuthorities.add(new SimpleGrantedAuthority(userPermissions.getDescricao()));
 		}
-		
+
 		userDetails.setPermissoes(listAuthorities);
-	    return userDetails;
+		return userDetails;
 	}
 
 }

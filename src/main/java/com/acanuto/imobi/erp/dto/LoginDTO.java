@@ -12,11 +12,11 @@ import lombok.Setter;
 @ApiModel
 public class LoginDTO {
 
-	@ApiModelProperty(notes = "Nome do usuário")
+	@ApiModelProperty(notes = "Nome do usuário", required = true)
 	@NotBlank(message = "Usuário deve ser preenchido corretamente.")
 	private String usuario;
 
-	@ApiModelProperty(notes = "Senha do usuário")
+	@ApiModelProperty(notes = "Senha do usuário", required = true)
 	@NotBlank(message = "Senha deve ser preenchida corretamente.")
 	private String senha;
 
