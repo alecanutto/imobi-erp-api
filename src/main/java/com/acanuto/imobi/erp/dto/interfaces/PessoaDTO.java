@@ -1,11 +1,7 @@
 package com.acanuto.imobi.erp.dto.interfaces;
 
-import java.util.Date;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-
-import com.acanuto.imobi.erp.enums.Enums.EnumSexo;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -32,14 +28,15 @@ public abstract class PessoaDTO extends EnderecoDTO {
 	private String cpf;
 
 	@ApiModelProperty(notes = "Data de nascimento")
-	private Date dataNasc;
+	private String dataNasc;
 	
 	@ApiModelProperty(notes = "Estado civil")
 	@Size(max = 20, message = "O campo estado civil deve conter no máximo 20 caracteres.")
 	private String estadoCivil;	
 
 	@ApiModelProperty(notes = "Sexo")
-	private EnumSexo sexo;
+	@Size(max = 1, message = "O campo sexo deve conter somente um caracter ('F', 'M').")
+	private String sexo;
 	
 	@ApiModelProperty(notes = "Naturalidade")
 	@Size(max = 60, message = "O campo naturalidade deve conter no máximo 60 caracteres.")
@@ -62,7 +59,7 @@ public abstract class PessoaDTO extends EnderecoDTO {
 	private String email;
 
 	@ApiModelProperty(notes = "Data de cadastro")
-	private Date dataCadastro;
+	private String dataCadastro;
 	
 	@ApiModelProperty(notes = "Status do cadastro")
 	private boolean ativo;

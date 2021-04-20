@@ -4,8 +4,6 @@ import java.util.Date;
 
 import org.springframework.data.annotation.Id;
 
-import com.acanuto.imobi.erp.enums.Enums.EnumSexo;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,7 +28,7 @@ public abstract class Pessoa extends Endereco {
 
 	private String estadoCivil;
 
-	private EnumSexo sexo;
+	private String sexo;	
 
 	private String naturalidade;
 
@@ -46,5 +44,6 @@ public abstract class Pessoa extends Endereco {
 
 	private boolean ativo;
 
-	private String obs;
+	private String obs;	
+
 }

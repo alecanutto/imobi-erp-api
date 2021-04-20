@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -22,6 +23,7 @@ import com.acanuto.imobi.erp.dto.FuncionarioDTO;
 import com.acanuto.imobi.erp.model.Funcionario;
 import com.acanuto.imobi.erp.service.FuncionarioService;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/funcionario")
 public class FuncionarioController {
@@ -41,7 +43,7 @@ public class FuncionarioController {
 	@PutMapping()
 	public ResponseEntity<?> update(@Valid @RequestBody FuncionarioDTO funcionarioDTO) {
 		try {
-			return new ResponseEntity<Funcionario>(service.update(funcionarioDTO), HttpStatus.OK);
+			return new ResponseEntity<Funcionario>(service.save(funcionarioDTO), HttpStatus.OK);
 		} catch (Exception e) {
 			throw new RuntimeException("Erro: " + System.lineSeparator() + e.getMessage());
 		}
@@ -55,7 +57,7 @@ public class FuncionarioController {
 		return funcionarios;
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping("/id")
 	public ResponseEntity<?> getById(@RequestParam long id) {
 		Optional<Funcionario> emp = service.getById(id);
 		if (emp.isPresent()) {
@@ -64,8 +66,14 @@ public class FuncionarioController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-
-	@GetMapping("/{cpf}")
+	
+	@PutMapping("/alterarSenha")
+	public boolean alterSenha(@RequestParam long id, @RequestParam String senha) {
+		return service.alterSenha(id, senha);
+	}
+	
+	
+	@GetMapping("/cpf")
 	public ResponseEntity<?> getByCpf(@RequestParam String cpf) {
 		Optional<Funcionario> emp = service.getByCpf(cpf);
 		if (emp.isPresent()) {
@@ -75,9 +83,9 @@ public class FuncionarioController {
 		}
 	}
 
-	@GetMapping("/{username}")
-	public ResponseEntity<?> getByUsername(@RequestParam String username) {
-		Optional<Funcionario> emp = service.getByUsername(username);
+	@GetMapping("/usuario")
+	public ResponseEntity<?> getByUsername(@RequestParam String usuario) {
+		Optional<Funcionario> emp = service.getByUsuario(usuario);
 		if (emp.isPresent()) {
 			return new ResponseEntity<Optional<Funcionario>>(emp, HttpStatus.OK);
 		} else {

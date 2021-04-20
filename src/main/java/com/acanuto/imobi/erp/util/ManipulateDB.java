@@ -61,8 +61,16 @@ public class ManipulateDB {
 				return field;
 			}
 		});
-
 	}	
 	
+	
+	public boolean execute(String sql) {		
+		try {
+			jdbcTemplate.execute(sql);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}		
+	}	
 
 }

@@ -39,11 +39,11 @@ public class CidadeService {
 		return repository.findByUfAndCidadeStartingWith(uf, cidade);
 	}
 
-	public List<Cidade> getAllByUf(String uf) {
+	public List<String> getAllByUf(String uf) {
 		return repository.findAllByUf(uf);
 	}
 
-	public List<Cidade> getAllUF() {
+	public List<String> getAllUF() {
 		return repository.findAllUf();
 	}
 

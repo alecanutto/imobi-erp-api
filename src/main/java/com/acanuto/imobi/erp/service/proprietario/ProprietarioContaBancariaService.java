@@ -61,9 +61,6 @@ public class ProprietarioContaBancariaService {
 		return repository.findById(id);
 	}
 
-	public Optional<ProprietarioContaBancaria> getByProprietarioId(long id) {
-		return repository.findByProprietarioId(id);
-	}
 
 	public List<ProprietarioContaBancaria> getAllByProprietarioId(long proprietarioId) {
 		return repository.findAllByProprietarioId(proprietarioId);

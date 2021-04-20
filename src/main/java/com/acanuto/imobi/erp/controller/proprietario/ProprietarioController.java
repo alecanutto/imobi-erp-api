@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +22,7 @@ import com.acanuto.imobi.erp.dto.proprietario.ProprietarioDTO;
 import com.acanuto.imobi.erp.model.proprietario.Proprietario;
 import com.acanuto.imobi.erp.service.proprietario.ProprietarioService;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/proprietario")
 public class ProprietarioController {
@@ -45,7 +47,7 @@ public class ProprietarioController {
 		return proprietarios;
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping("/id")
 	public ResponseEntity<?> getById(@RequestParam long id) {
 		Optional<Proprietario> proprietario = service.getById(id);
 		if (proprietario.isPresent()) {
@@ -55,7 +57,7 @@ public class ProprietarioController {
 		}
 	}
 
-	@GetMapping("/{cpf}")
+	@GetMapping("/cpf")
 	public ResponseEntity<?> getByCpf(@RequestParam String cpf) {
 		Optional<Proprietario> proprietario = service.getByCpf(cpf);
 		if (proprietario.isPresent()) {

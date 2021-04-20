@@ -7,6 +7,8 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,8 +21,9 @@ import com.acanuto.imobi.erp.dto.CidadeDTO;
 import com.acanuto.imobi.erp.model.Cidade;
 import com.acanuto.imobi.erp.service.CidadeService;
 
+@CrossOrigin
 @RestController
-@RequestMapping("/api/cidades")
+@RequestMapping("/api/cidade")
 public class CidadeController {
 
 	@Autowired
@@ -35,7 +38,7 @@ public class CidadeController {
 		}
 	}
 
-	@GetMapping("/{id}")
+	@DeleteMapping("{id}")
 	@ResponseStatus(value = HttpStatus.OK)
 	public void deleteById(@RequestParam long id) {
 		service.deleteById(id);
@@ -49,18 +52,18 @@ public class CidadeController {
 	
 	@GetMapping("/uf")
 	@ResponseStatus(value = HttpStatus.OK)
-	public List<Cidade> getAllUF() {
+	public List<String> getAllUF() {
 		return service.getAllUF();
 	}
 	
-	@GetMapping("/{uf}")
+	@GetMapping("/cidades")	
 	@ResponseStatus(value = HttpStatus.OK)
-	public List<Cidade> getAllByUf(@RequestParam String uf) {
+	public List<String> getAllByUf(@RequestParam String uf) {
 		return service.getAllByUf(uf);
 	}
 
-	@GetMapping("/{cidade}")
-	public ResponseEntity<?> getByUfAndCidade(@RequestParam String uf, @RequestParam String cidade) {
+	@GetMapping("/filtro")
+	public ResponseEntity<?> getByUfAndCidade(@RequestParam String cidade, @RequestParam String uf) {
 		Cidade cid = service.getByUfAndCidade(uf, cidade);
 		if (cidade != null) {
 			return new ResponseEntity<Cidade>(cid, HttpStatus.OK);

@@ -1,7 +1,5 @@
 package com.acanuto.imobi.erp.dto.interfaces;
 
-import java.util.Date;
-
 import javax.validation.constraints.Size;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -19,13 +17,9 @@ public abstract class IBancoDTO {
 	@Size(max = 255, message = "O campo pix deve conter no máximo 255 caracteres.")
 	private String pix;
 
-	@ApiModelProperty(notes = "Código do banco")
-	@Size(max = 150, message = "O campo código do banco deve conter no máximo 150 caracteres.")
-	private String codigoBanco;
-
 	@ApiModelProperty(notes = "Nome do banco")
-	@Size(max = 60, message = "O campo nome do banco deve conter no máximo 60 caracteres.")
-	private String nome;
+	@Size(max = 100, message = "O campo nome do banco deve conter no máximo 100 caracteres.")
+	private String nomeBanco;
 
 	@ApiModelProperty(notes = "Número da agência")
 	@Size(max = 10, message = "O campo número agência deve conter no máximo 10 caracteres.")
@@ -43,6 +37,6 @@ public abstract class IBancoDTO {
 	private String obs;
 
 	@ApiModelProperty(notes = "Data de cadastro")
-	private Date dataCadastro;
+	private String dataCadastro;
 	
 }

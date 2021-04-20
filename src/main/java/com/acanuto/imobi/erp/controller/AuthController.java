@@ -3,7 +3,6 @@ package com.acanuto.imobi.erp.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.acanuto.imobi.erp.dto.LoginDTO;
 import com.acanuto.imobi.erp.dto.response.ResponseLoginDTO;
-import com.acanuto.imobi.erp.repository.UsuarioRepository;
 import com.acanuto.imobi.erp.security.jwt.JwtUtils;
 import com.acanuto.imobi.erp.security.service.UserDetailsImpl;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -33,16 +31,13 @@ public class AuthController {
 	AuthenticationManager authenticationManager;
 
 	@Autowired
-	UsuarioRepository userRepository;
-
-	@Autowired
 	PasswordEncoder encoder;
 
 	@Autowired
 	JwtUtils jwtUtils;
 
-	@PostMapping()
-	public ResponseEntity<?> login(@Valid @RequestBody LoginDTO loginDTO) {
+	@PostMapping("/login")
+	public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
 
 		try {
 			
@@ -62,7 +57,7 @@ public class AuthController {
 			return ResponseEntity.ok(new ResponseLoginDTO(jwt, expiration, userDetails.getId(), userDetails.getUsername(), roles));
 			
 		} catch (Exception e) {
-			throw new RuntimeException(e.getMessage());
+			throw new RuntimeException(e);
 		}
 	}
 	

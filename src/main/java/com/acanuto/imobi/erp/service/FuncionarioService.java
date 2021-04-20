@@ -4,13 +4,12 @@ import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import com.acanuto.imobi.erp.dto.FuncionarioDTO;
-import com.acanuto.imobi.erp.dto.UsuarioDTO;
 import com.acanuto.imobi.erp.model.Funcionario;
-import com.acanuto.imobi.erp.model.Usuario;
 import com.acanuto.imobi.erp.repository.FuncionarioRepository;
 import com.acanuto.imobi.erp.util.ManipulateDB;
 import com.acanuto.imobi.erp.validator.FuncionarioValidator;
@@ -19,18 +18,18 @@ import com.acanuto.imobi.erp.validator.FuncionarioValidator;
 public class FuncionarioService {
 
 	@Autowired
-	private FuncionarioRepository funcionarioRepository;
+	private ManipulateDB db;
 
 	@Autowired
-	private UsuarioService usuarioService;
+	private PasswordEncoder encoder;
 
 	@Autowired
 	private ModelMapper modelMapper;
 
-	@Autowired
-	private ManipulateDB db;
-
 	private FuncionarioValidator funcionarioValidator;
+
+	@Autowired
+	private FuncionarioRepository repository;
 
 	public Funcionario save(FuncionarioDTO dto) throws Exception {
 
@@ -38,41 +37,11 @@ public class FuncionarioService {
 			throw new Exception("Dados do funcionário não informado!");
 		}
 
-		Funcionario func = modelMapper.map(dto, Funcionario.class);
-
-		funcionarioValidator = new FuncionarioValidator(func);
-
-		if (!funcionarioValidator.validate()) {
-			throw new Exception(StringUtils.collectionToDelimitedString(funcionarioValidator.getListErrors(), ","));
-		}
-		if (StringUtils.hasLength(func.getCpf()) && funcionarioRepository.existsByCpf(func.getCpf())) {
-			throw new Exception("CPF já cadastrado!");
-		}
-
-		if (dto.getLogin() != null && StringUtils.hasText(dto.getLogin().getUsuario())
-				&& usuarioService.existsByLogin(dto.getLogin().getUsuario())) {
-			throw new Exception("Login já cadastrado!");
-		}
-
-		func = funcionarioRepository.save(func);
-
-		saveUser(dto.getLogin(), func.getId());
-
-		return func;
-
-	}
-
-	public Funcionario update(FuncionarioDTO dto) throws Exception {
-
-		if (dto == null) {
-			throw new Exception("Dados do funcionário não infomado!");
-		}
-
-		Funcionario func = modelMapper.map(dto, Funcionario.class);
-
-		if (!funcionarioRepository.existsById(func.getId())) {
+		if (dto.getId() > 0 && !repository.existsById(dto.getId())) {
 			throw new Exception("Registro não encontrado!");
 		}
+
+		Funcionario func = modelMapper.map(dto, Funcionario.class);
 
 		funcionarioValidator = new FuncionarioValidator(func);
 
@@ -89,52 +58,61 @@ public class FuncionarioService {
 			}
 		}
 
-		if (dto.getLogin() != null && StringUtils.hasText(dto.getLogin().getUsuario())) {
-			if ((boolean) db.getField("select exists (select id from tb_usuarios where funcionario_id <> "
-					+ func.getId() + " and login = '" + dto.getLogin().getUsuario() + "');")) {
-				throw new Exception("Login já cadastrado!");
+		if (StringUtils.hasText(dto.getUsuario())) {
+			if ((boolean) db.getField("select exists (select id from tb_funcionarios where id <> " + func.getId()
+					+ " and usuario = '" + dto.getUsuario() + "');")) {
+				throw new Exception("Usuário já cadastrado!");
 			}
-		}		
-
-		func = funcionarioRepository.save(func);
-
-		long idUsuario = (long) db.getField("select id from tb_usuarios where funcionario_id = " + func.getId());
-
-		if (idUsuario > 0) {
-			dto.setId(idUsuario);
-			updateUser(dto.getLogin(), func.getId());
 		} else {
-			saveUser(dto.getLogin(), func.getId());
+			throw new Exception("Usuário não informado!");
 		}
 
+		if (!StringUtils.hasText(func.getSenha())) {
+			func.setSenha("1234");
+		}
+
+		func.setSenha(encoder.encode(func.getSenha()));
+
+		try {
+			return repository.save(func);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 		return func;
 
 	}
 
 	public Optional<Funcionario> getById(long id) {
-		return funcionarioRepository.findById(id);
+		return repository.findById(id);
 	}
 
 	public Optional<Funcionario> getByCpf(String cpf) {
-		return funcionarioRepository.findByCpf(cpf);
+		return repository.findByCpf(cpf);
 	}
 
-	public Optional<Funcionario> getByUsername(String username) {
-		return funcionarioRepository.findByLogin(username);
+	public boolean alterSenha(long id, String senha) {
+
+		if (!repository.existsById(id)) {
+			return false;
+//			throw new Exception("Registro não encontrado!");
+		}
+
+		if (!StringUtils.hasText(senha)) {
+			senha = "1234";
+		}
+
+		senha = encoder.encode(senha);
+
+		return db.execute("update tb_funcionarios set senha = '" + senha + "' where id = " + id);
+
+	}
+
+	public Optional<Funcionario> getByUsuario(String usuario) {
+		return repository.findByUsuario(usuario);
 	}
 
 	public Iterable<Funcionario> getAll() {
-		return funcionarioRepository.findAll();
-	}
-
-	private void saveUser(UsuarioDTO usuario, long idFunc) throws Exception {
-		Usuario user = new Usuario(0, idFunc, usuario.getUsuario(), usuario.getSenha(), usuario.isAtivo());
-		usuarioService.save(user);
-	}
-
-	private void updateUser(UsuarioDTO usuario, long idFunc) throws Exception {
-		Usuario user = new Usuario(0, idFunc, usuario.getUsuario(), usuario.getSenha(), usuario.isAtivo());
-		usuarioService.update(user);
+		return repository.findAll();
 	}
 
 }

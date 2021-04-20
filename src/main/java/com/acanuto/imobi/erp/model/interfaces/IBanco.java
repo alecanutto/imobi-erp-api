@@ -18,9 +18,7 @@ public abstract class IBanco {
 	
 	private String pix;
 
-	private String codigoBanco;
-
-	private String nome;
+	private String nomeBanco;
 
 	private String numeroConta;
 

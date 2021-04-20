@@ -49,8 +49,8 @@ public class Enums {
 
 		private final String valor;
 
-		EnumSexo(String string) {
-			valor = string;
+		private EnumSexo(String valorOpcao) {
+			valor = valorOpcao;
 		}
 
 		public String getValor() {

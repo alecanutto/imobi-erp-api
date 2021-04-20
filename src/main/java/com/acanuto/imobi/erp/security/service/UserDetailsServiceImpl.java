@@ -17,16 +17,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.acanuto.imobi.erp.model.Funcionario;
 import com.acanuto.imobi.erp.model.PermissaoAcesso;
+import com.acanuto.imobi.erp.repository.FuncionarioRepository;
 import com.acanuto.imobi.erp.repository.PermissaoAcessoRepository;
-import com.acanuto.imobi.erp.repository.UsuarioRepository;
 import com.acanuto.imobi.erp.util.Function;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
-	UsuarioRepository userRepository;
+	FuncionarioRepository userRepository;
 
 	@Autowired
 	PermissaoAcessoRepository repository;
@@ -45,7 +46,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 					ud.getAuthorities());
 		}
 
-		Optional<com.acanuto.imobi.erp.model.Usuario> user = userRepository.getByLogin(username);
+		Optional<Funcionario> user = userRepository.findByUsuario(username);
 		if (user.isEmpty()) {
 			throw new UsernameNotFoundException("Usuário não encontrado: " + username);
 		}

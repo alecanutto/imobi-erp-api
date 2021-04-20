@@ -1,7 +1,6 @@
 package com.acanuto.imobi.erp.repository.proprietario;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,9 +11,7 @@ import com.acanuto.imobi.erp.repository.PessoaContaBancariaRepository;
 
 @Repository
 public interface ProprietarioContaBancariaRepository extends PessoaContaBancariaRepository<ProprietarioContaBancaria> {
-	
-	Optional<ProprietarioContaBancaria> findByProprietarioId(@Param("proprietarioId") long proprietarioId);
-	
+		
 	@Query(value = "Select * from tb_proprietario_bancos where proprietario_id = :proprietarioId;")
 	List<ProprietarioContaBancaria> findAllByProprietarioId(@Param("proprietarioId") long proprietarioId);
 

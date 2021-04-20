@@ -32,6 +32,9 @@ CREATE TABLE tb_funcionarios (
     email character varying(150),	
     cargo character varying(30),
     remuneracao numeric(9,2) default 0,
+    usuario character varying(30),
+    senha character varying(255),
+    usuarioSistema boolean DEFAULT false,
 	data_admissao date,
 	data_demissao date,
 	data_cadastro date DEFAULT CURRENT_DATE,
@@ -39,6 +42,7 @@ CREATE TABLE tb_funcionarios (
     obs character varying(200),	
     CONSTRAINT tb_funcionarios_pkey PRIMARY KEY (id),
 	CONSTRAINT tb_funcionarios_uk_cpf UNIQUE (cpf),
+	CONSTRAINT tb_funcionarios_uk_usuario UNIQUE (usuario),
 	CONSTRAINT tb_funcionarios_ck_sexo CHECK (sexo IN ('F','M','X'))
 );
 
