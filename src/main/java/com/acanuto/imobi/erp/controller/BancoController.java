@@ -21,6 +21,10 @@ import com.acanuto.imobi.erp.dto.BancoDTO;
 import com.acanuto.imobi.erp.model.Banco;
 import com.acanuto.imobi.erp.service.BancoService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
+@Api(tags = "Bancos")
 @RestController
 @RequestMapping("/api/bancos")
 public class BancoController {
@@ -38,6 +42,7 @@ public class BancoController {
 	}
 	
 	@GetMapping()
+	@ApiOperation(value = "Este método é usado para consultar todos os bancos cadastrados.")
 	@ResponseStatus(value = HttpStatus.OK)
 	public List<Banco> getAll() {
 		List<Banco> bancos = new ArrayList<>();

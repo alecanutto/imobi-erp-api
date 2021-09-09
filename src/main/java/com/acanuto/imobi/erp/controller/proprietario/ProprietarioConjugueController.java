@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +19,7 @@ import com.acanuto.imobi.erp.dto.proprietario.ProprietarioConjugueDTO;
 import com.acanuto.imobi.erp.model.proprietario.ProprietarioConjugue;
 import com.acanuto.imobi.erp.service.proprietario.ProprietarioConjugueService;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/proprietario_conjugue")
 public class ProprietarioConjugueController {
@@ -34,7 +36,7 @@ public class ProprietarioConjugueController {
 		}
 	}
 
-	@GetMapping("/{proprietarioId}")
+	@GetMapping("/getByProprietarioId")
 	public ResponseEntity<?> getByProprietarioId(@RequestParam long proprietarioId) {
 		Optional<ProprietarioConjugue> conjugue = service.getByProprietarioId(proprietarioId);
 		if (conjugue.isPresent()) {
@@ -44,7 +46,7 @@ public class ProprietarioConjugueController {
 		}
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping()
 	public ResponseEntity<?> getById(@RequestParam long id) {
 		Optional<ProprietarioConjugue> conjugue = service.getById(id);
 		if (conjugue.isPresent()) {

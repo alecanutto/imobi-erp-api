@@ -25,14 +25,14 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.security:spring-security-test'
+	implementation 'org.springframework.security.oauth:spring-security-oauth2:2.5.1.RELEASE'
+	implementation 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.5.2'
 	
-	// JAX-B dependencies for JDK 9+
+			
     implementation "jakarta.xml.bind:jakarta.xml.bind-api:2.3.2"
     implementation "org.glassfish.jaxb:jaxb-runtime:2.3.2"
-    
-    // https://mvnrepository.com/artifact/org.modelmapper/modelmapper
-	implementation "org.modelmapper:modelmapper:2.3.9"    
-	
+    implementation "org.modelmapper:modelmapper:2.3.9"    
+				
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.postgresql:postgresql'

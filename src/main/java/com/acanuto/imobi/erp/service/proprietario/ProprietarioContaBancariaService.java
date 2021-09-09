@@ -46,7 +46,7 @@ public class ProprietarioContaBancariaService {
 		}
 
 		// verifica se já existe um número pix para um mesmo cadastro
-		String nome = (String) db.getField("select nome from tb_proprietario_bancos where id <> " + banco.getId()
+		String nome = (String) db.getField("select nome_banco from tb_proprietario_bancos where id <> " + banco.getId()
 				+ " and proprietario_id = " + banco.getProprietarioId() + " and pix = '" + banco.getPix() + "';");
 
 		if (StringUtils.hasText(nome)) {
@@ -59,6 +59,10 @@ public class ProprietarioContaBancariaService {
 
 	public Optional<ProprietarioContaBancaria> getById(long id) {
 		return repository.findById(id);
+	}
+	
+	public void deleteById(long id) {
+		repository.deleteById(id);
 	}
 
 
